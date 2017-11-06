@@ -1,0 +1,39 @@
+Ex 1.) How does a program read the cvMat object; what is the order of the pixel structure?
+
+The cvMat object holds pixels in a 2D matrix. Pixels are stored by row then column.
+Because of this, if you wanted to access the pixel at location (x,y), you'd need to access it via (y,x), where y is the row number and x is the column number.
+
+Ex 2.)
+	1.) Implement ColorImage.cpp in Python
+
+	(Implemented as ColorImage.py)
+
+	2.) Print out the values of the pixel at (20, 25) in RGB, YCbCr, and HSV. What are the ranges of pixel values in each channel of each of the above mentioned colorspaces?
+
+	For baboon.jpg:
+
+	RGB : [102 165 156]
+	YCrCb: [155 129 98]
+	HSV : [34 97 165]
+
+	RGB: each color has range 0 to 255
+	YCrCb: each channel has range 0 to 255
+	HSV: H in 0 to 179, S in 0 to 255, V in 0 to 255
+
+Ex 3.) 
+	1.) Implement Noise.cpp in Python; print results for different noise values
+	in Gausian case (mean = 0,5,10,20; sigma = 0, 20, 50, 100; pa = 0.01, 0.03, 0.05, 0.4; pb  0.01, 0.03, 0.05, 0.4)
+
+	(Implemented as Noise.py)
+	
+
+	2.) Change kernel sizes for all filters with different noise values,
+	print results for 3x3, 5x5, 7x7 kernels; comment on the results; which filter works "better" for salt and pepper noise and gausian noise?
+
+	3x3 with the median filter works best for salt and pepper noise.
+	7x7 With Gaussian noise, median filter is the best for cleanup.
+
+
+
+	
+	
