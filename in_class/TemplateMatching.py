@@ -2,9 +2,9 @@ import numpy as np
 import cv2
 
 def TemplateMatching(src, temp, stepsize): # src: source image, temp: template image, stepsize: the step size for sliding the template
-    mean_t = 0;
-    var_t = 0;
-    location = [0, 0];
+    mean_t = 0
+    var_t = 0
+    location = [0, 0]
 
     correlations = {}
     # Calculate the mean and variance of template pixel values
@@ -19,53 +19,62 @@ def TemplateMatching(src, temp, stepsize): # src: source image, temp: template i
     mean_t = np.mean(array_like_temp)
     var_t = np.var(array_like_temp)
 
+    print("Template:", mean_t, var_t)
+
                     
-    max_corr = 0;
+    max_corr = 0
     # Slide window in source image and find the maximum correlation
     for i in np.arange(0, src.shape[0] - temp.shape[0], stepsize):
         for j in np.arange(0, src.shape[1] - temp.shape[1], stepsize):
-            mean_s = 0;
-            var_s = 0;
-            corr = 0;
+            mean_s = 0
+            var_s = 0
+            corr = 0
             # Calculate the mean and variance of source image pixel values inside window
             # ------------------ Put your code below ------------------ 
             array_like_src = np.reshape(src[i:i+temp.shape[0] , j:j+temp.shape[1]], -1)
             
             mean_s = np.mean(array_like_src)
             var_s = np.var(array_like_src)
+
+            #print("Source reigon:", (i, j), mean_s, var_s)
             
             # Calculate normalized correlation coefficient (NCC) between source and template
             # ------------------ Put your code below ------------------ 
             
             #sum up correlations
+            '''
             for k in np.arange(i,i+temp.shape[0], 1):
                 for l in np.arange(j,j+temp.shape[1], 1):
-                    corr += (src[k, l] - mean_s) * (temp[k-i, l-j] - mean_t)
+                    corr += (((src[k, l] - mean_s) * (temp[k-i, l-j] - mean_t)))
+            '''
 
+            corr =  np.mean((array_like_src-mean_s)*(array_like_temp-mean_t))/(var_s*var_t)
+            
             #divide by variance
-            corr = corr / (var_s * var_t)
+            #corr = corr / (var_s * var_t)
 
             #normalize by number of pixels
-            corr = corr / (temp.shape[0] * temp.shape[1])
+            #corr = corr / (temp.shape[0] * temp.shape[1])
 
             #print(i, j, corr)
             correlations[str(i)+str(j)] = corr
 
             if corr > max_corr:
-                max_corr = corr;
-                location = [i, j];
+                max_corr = corr
+                location = [i, j]
+                print(location, corr)
 
     #print(max(correlations.keys(),key=(lambda key: correlations[key]) ))
     return location
 
 # load source and template images
-source_img = cv2.imread('../img/coins.png',0) # read image in grayscale
-temp = cv2.imread('../img/coin.jpg',0) # read image in grayscale
+source_img = cv2.imread('../img/rice_grains.jpg',0) # read image in grayscale
+temp = cv2.imread('../img/rice_grain.png',0) # read image in grayscale
 
 print(source_img.shape)
 print(temp.shape)
 
-location = TemplateMatching(source_img, temp, 1);
+location = TemplateMatching(source_img, temp, 20)
 print(location)
 match_img = cv2.cvtColor(source_img, cv2.COLOR_GRAY2RGB)
 
@@ -84,5 +93,5 @@ cv2.namedWindow('TemplateImage', cv2.WINDOW_NORMAL)
 cv2.namedWindow('MyTemplateMatching', cv2.WINDOW_NORMAL)
 cv2.imshow('TemplateImage', temp)
 cv2.imshow('MyTemplateMatching', match_img)
-cv2.waitKey(0)
+cv2.waitKey(10000)
 cv2.destroyAllWindows()
